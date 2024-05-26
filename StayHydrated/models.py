@@ -22,7 +22,7 @@ class User(db.Model):
     name: Mapped[str] = mapped_column(String)
     surname: Mapped[str] = mapped_column(String)
     registration_date: Mapped[datetime] = mapped_column(
-        DateTime, default=datetime.now()
+        DateTime, default=datetime.now
     )
 
     personal_data: Mapped["PersonalData"] = relationship(back_populates="user")
@@ -68,7 +68,7 @@ class PersonalData(db.Model):
     activity_level: Mapped[int] = mapped_column(Integer)
     climate: Mapped[int] = mapped_column(Integer)
 
-    user_id: Mapped[int] = mapped_column(Integer, ForeignKey("user.id"))
+    user_id: Mapped[int] = mapped_column(Integer, ForeignKey("user.id"), unique=True)
     avatar_id: Mapped[int] = mapped_column(Integer, ForeignKey("avatar.id"))
 
     user: Mapped["User"] = relationship(back_populates="personal_data")
@@ -111,7 +111,7 @@ class Goal(db.Model):
     daily_amount: Mapped[int] = mapped_column(Integer)
     completed_days: Mapped[int] = mapped_column(Integer, default=0)
 
-    user_id: Mapped[int] = mapped_column(Integer, ForeignKey("user.id"))
+    user_id: Mapped[int] = mapped_column(Integer, ForeignKey("user.id"), unique=True)
 
     user: Mapped["User"] = relationship(back_populates="goal")
 
@@ -163,7 +163,7 @@ class Bottle(db.Model):
 
 class Record(db.Model):
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    time: Mapped[datetime] = mapped_column(DateTime, default=datetime.now())
+    time: Mapped[datetime] = mapped_column(DateTime, default=datetime.now)
     amount: Mapped[int] = mapped_column(Integer)
     record_type: Mapped[bool] = mapped_column(Boolean)
 
@@ -173,12 +173,12 @@ class Record(db.Model):
 
     def __init__(
         self,
-        bottle_id: int,
+        user_id:int,
         amount: int,
         record_type: bool,
     ) -> None:
 
-        self.bottle_id = bottle_id
+        self.user_id = user_id
         self.amount = amount
         self.record_type = record_type
 
